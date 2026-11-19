@@ -17,6 +17,7 @@ import com.acertainbookstore.business.BookCopy;
 import com.acertainbookstore.business.CertainBookStore;
 import com.acertainbookstore.business.ImmutableStockBook;
 import com.acertainbookstore.business.StockBook;
+import com.acertainbookstore.business.BookRating;
 import com.acertainbookstore.client.BookStoreHTTPProxy;
 import com.acertainbookstore.client.StockManagerHTTPProxy;
 import com.acertainbookstore.interfaces.BookStore;
@@ -347,6 +348,97 @@ public class BookStoreTest {
 		List<StockBook> booksInStorePostTest = storeManager.getBooks();
 		assertTrue(booksInStorePreTest.containsAll(booksInStorePostTest)
 				&& booksInStorePreTest.size() == booksInStorePostTest.size());
+	}
+
+	/**
+	 * Test throws exception for book rating above 5
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test
+	public void testRatingsAboveFive() throws BookStoreException {
+		Set<BookRating> ratings = new HashSet<>();
+		BookRating rating = new BookRating(1, 6);
+		ratings.add(rating);
+
+		try {
+			client.rateBooks(ratings);
+			fail();
+		} catch (BookStoreException ex) {
+			;
+		}
+	}
+
+	/**
+	 * Test throws exception for book rating below 0
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test
+	public void testRatingsNotBelowZero() throws BookStoreException {
+		Set<BookRating> ratings = new HashSet<>();
+		BookRating rating = new BookRating(1, -1);
+		ratings.add(rating);
+
+		try {
+			client.rateBooks(ratings);
+			fail();
+		} catch (BookStoreException ex) {
+			;
+		}
+	}
+
+	/**
+	 * Test throws exception for none valid ISBN
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test
+	public void testSuccessIfCatchesNoneValidISBN() throws BookStoreException {
+		addBooks(1, 1);
+		Set<BookRating> ratings = new HashSet<>();
+		int invalid_isbn = 2;
+		BookRating rating = new BookRating(invalid_isbn, 5);
+		ratings.add(rating);
+		
+		try {
+			client.rateBooks(ratings);
+			fail();
+		} catch (BookStoreException ex) {
+			;
+		}
+	}
+
+	/**
+	 * Test that a books rating is updated correctly
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test
+	public void testSuccessIfBooksRatingIsUpdatedCorrectly() throws BookStoreException {
+		addBooks(1, 1);
+		List<StockBook> old_books = storeManager.getBooks();
+
+		Set<BookRating> ratings = new HashSet<>();
+		int isbn = 1;
+		BookRating rating = new BookRating(isbn, 5);
+		ratings.add(rating);
+		client.rateBooks(ratings);
+
+		List<StockBook> updated_books = storeManager.getBooks(); 
+
+		System.out.println(old_books.get(0).getTotalRating());
+		System.out.println(updated_books.get(0).getTotalRating());
+
+		assertTrue(old_books.get(0).getTotalRating() + 5 == updated_books.get(0).getTotalRating() && 
+			old_books.get(0).getNumTimesRated() + 1 == updated_books.get(0).getNumTimesRated()
+		);
+		
+		
 	}
 
 	/**

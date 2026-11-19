@@ -30,6 +30,7 @@ public class CertainBookStore implements BookStore, StockManager {
 
 	/** The mapping of books from ISBN to {@link BookStoreBook}. */
 	private Map<Integer, BookStoreBook> bookMap = null;
+	private Map<Integer, Float> bookRatings = null;
 
 	/**
 	 * Instantiates a new {@link CertainBookStore}.
@@ -337,7 +338,29 @@ public class CertainBookStore implements BookStore, StockManager {
 	 */
 	@Override
 	public synchronized void rateBooks(Set<BookRating> bookRating) throws BookStoreException {
-		throw new BookStoreException();
+		if (bookRating == null) {
+			throw new BookStoreException(BookStoreConstants.NULL_INPUT);
+		}
+
+		for (BookRating rating : bookRating) {
+			int value = rating.getRating();
+			int isbn = rating.getISBN();
+
+			if (value < 0 || value > 5) {
+				throw new BookStoreException(BookStoreConstants.INVALID);
+			}
+
+			validateISBNInStock(isbn);
+		}
+
+		for (BookRating rating : bookRating) {
+			int isbn = rating.getISBN();
+			int rating_number = rating.getRating();
+			System.out.println(rating_number);
+			BookStoreBook book = bookMap.get(isbn);
+			book.addRating(rating_number);
+		}
+		
 	}
 
 	/*
