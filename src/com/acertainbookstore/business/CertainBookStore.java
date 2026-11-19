@@ -30,6 +30,7 @@ public class CertainBookStore implements BookStore, StockManager {
 
 	/** The mapping of books from ISBN to {@link BookStoreBook}. */
 	private Map<Integer, BookStoreBook> bookMap = null;
+	private Map<Integer, Float> bookRatings = null;
 
 	/**
 	 * Instantiates a new {@link CertainBookStore}.
@@ -349,9 +350,15 @@ public class CertainBookStore implements BookStore, StockManager {
 				throw new BookStoreException(BookStoreConstants.INVALID);
 			}
 
-			if (!bookMap.containsKey(isbn)) {
-				throw new BookStoreException(BookStoreConstants.INVALID);
-			}
+			validateISBNInStock(isbn);
+		}
+
+		for (BookRating rating : bookRating) {
+			int isbn = rating.getISBN();
+			int rating_number = rating.getRating();
+			System.out.println(rating_number);
+			BookStoreBook book = bookMap.get(isbn);
+			book.addRating(rating_number);
 		}
 		
 	}

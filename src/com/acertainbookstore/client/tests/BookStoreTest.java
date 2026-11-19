@@ -413,6 +413,35 @@ public class BookStoreTest {
 	}
 
 	/**
+	 * Test that a books rating is updated correctly
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test
+	public void testSuccessIfBooksRatingIsUpdatedCorrectly() throws BookStoreException {
+		addBooks(1, 1);
+		List<StockBook> old_books = storeManager.getBooks();
+
+		Set<BookRating> ratings = new HashSet<>();
+		int isbn = 1;
+		BookRating rating = new BookRating(isbn, 5);
+		ratings.add(rating);
+		client.rateBooks(ratings);
+
+		List<StockBook> updated_books = storeManager.getBooks(); 
+
+		System.out.println(old_books.get(0).getTotalRating());
+		System.out.println(updated_books.get(0).getTotalRating());
+
+		assertTrue(old_books.get(0).getTotalRating() + 5 == updated_books.get(0).getTotalRating() && 
+			old_books.get(0).getNumTimesRated() + 1 == updated_books.get(0).getNumTimesRated()
+		);
+		
+		
+	}
+
+	/**
 	 * Tear down after class.
 	 *
 	 * @throws BookStoreException
