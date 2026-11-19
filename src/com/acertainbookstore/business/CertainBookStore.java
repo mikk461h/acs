@@ -318,7 +318,9 @@ public class CertainBookStore implements BookStore, StockManager {
 	 */
 	@Override
 	public synchronized List<Book> getTopRatedBooks(int numBooks) throws BookStoreException {
-		throw new BookStoreException();
+		if (numBooks < 1) {
+			throw new BookStoreException(BookStoreConstants.INVALID);
+		}
 	}
 
 	/*
