@@ -337,7 +337,17 @@ public class CertainBookStore implements BookStore, StockManager {
 	 */
 	@Override
 	public synchronized void rateBooks(Set<BookRating> bookRating) throws BookStoreException {
-		throw new BookStoreException();
+		if (bookRating == null) {
+			throw new BookStoreException(BookStoreConstants.NULL_INPUT);
+		}
+
+		for (BookRating rating : bookRating) {
+			int value = rating.getRating();
+			
+			if (value < 0 || value > 5) {
+            	throw new BookStoreException(BookStoreConstants.INVALID);
+        	}
+    	}
 	}
 
 	/*

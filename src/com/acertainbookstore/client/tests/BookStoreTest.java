@@ -17,6 +17,7 @@ import com.acertainbookstore.business.BookCopy;
 import com.acertainbookstore.business.CertainBookStore;
 import com.acertainbookstore.business.ImmutableStockBook;
 import com.acertainbookstore.business.StockBook;
+import com.acertainbookstore.business.BookRating;
 import com.acertainbookstore.client.BookStoreHTTPProxy;
 import com.acertainbookstore.client.StockManagerHTTPProxy;
 import com.acertainbookstore.interfaces.BookStore;
@@ -347,6 +348,20 @@ public class BookStoreTest {
 		List<StockBook> booksInStorePostTest = storeManager.getBooks();
 		assertTrue(booksInStorePreTest.containsAll(booksInStorePostTest)
 				&& booksInStorePreTest.size() == booksInStorePostTest.size());
+	}
+
+	/**
+	 * Test throws exception for book rating above 5
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test(expected = BookStoreException.class)
+	public void testProvidedBookRatingNotNull() throws BookStoreException {
+		Set<BookRating> ratings = new HashSet<>();
+		BookRating rating = new BookRating(1, 6);
+		ratings.add(rating);
+		client.rateBooks(ratings);
 	}
 
 	/**
