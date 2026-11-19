@@ -444,10 +444,10 @@ public class BookStoreTest {
 	 */
 	@Test
 	public void testSuccessIfCorrectlyStopsFromRequestingInvalidNumberOfBooks() throws BookStoreException {
+	
 		addBooks(1, 1);
-
 		try {
-			ist<Book> books = client.getTopRatedBooks(2);
+			List<Book> books = client.getTopRatedBooks(3);
 			fail();
 		} catch (BookStoreException ex) {
 			;
@@ -463,7 +463,7 @@ public class BookStoreTest {
 	@Test
 	public void testSuccessIfCorrectlyStopsNegativeNumberOfBooksRequested() throws BookStoreException {
 		addBooks(1, 1);
-
+		
 		try {
 			List<Book> books = client.getTopRatedBooks(-1);
 			fail();
@@ -481,7 +481,7 @@ public class BookStoreTest {
 	@Test
 	public void testSuccessIfBookRatedIsReturned() throws BookStoreException {
 		addBooks(1, 1);
-		List<Book> books = storeManager.getTopRatedBooks(1);
+		List<Book> books = client.getTopRatedBooks(1);
 		assertTrue(books.get(0).getISBN() == 1 && books.size() == 1);
 	}
 	
@@ -493,7 +493,7 @@ public class BookStoreTest {
 	 *             the book store exception
 	 */
 	@Test
-	public void testSuccessIfBookRatedIsReturned() throws BookStoreException {
+	public void testSuccessIfBooksReturnedInCorrectOrder() throws BookStoreException {
 		addBooks(2, 1);
 		addBooks(1, 1);
 		Set<BookRating> ratings = new HashSet<>();
@@ -501,8 +501,7 @@ public class BookStoreTest {
 		BookRating rating = new BookRating(isbn, 5);
 		ratings.add(rating);
 		client.rateBooks(ratings);
-
-		List<Book> books = storeManager.getTopRatedBooks(1);
+		List<Book> books = client.getTopRatedBooks(1);
 		assertTrue(books.get(0).getISBN() == 1 && books.size()==1);
 	}
 
@@ -513,7 +512,7 @@ public class BookStoreTest {
 	 *             the book store exception
 	 */
 	@Test
-	public void testSuccessIfBookRatedIsReturned() throws BookStoreException {
+	public void testSuccessIfHighestBookRatedIsReturned() throws BookStoreException {
 		addBooks(1, 1);
 		addBooks(2, 1);
 		Set<BookRating> ratings = new HashSet<>();
@@ -522,9 +521,8 @@ public class BookStoreTest {
 		ratings.add(rating1);
 		ratings.add(rating2);
 		client.rateBooks(ratings);
-
-		List<Book> books = storeManager.getTopRatedBooks(1);
-		assertTrue(books.get(0).getISBN() == 1 && books.size()==1);
+		List<Book> books = client.getTopRatedBooks(2);
+		assertTrue(books.get(0).getISBN() == 1 && books.size()==2);
 	}
 
 	/**
