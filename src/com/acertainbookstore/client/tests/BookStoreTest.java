@@ -357,9 +357,23 @@ public class BookStoreTest {
 	 *             the book store exception
 	 */
 	@Test(expected = BookStoreException.class)
-	public void testProvidedBookRatingNotNull() throws BookStoreException {
+	public void testRatingsAboveFive() throws BookStoreException {
 		Set<BookRating> ratings = new HashSet<>();
 		BookRating rating = new BookRating(1, 6);
+		ratings.add(rating);
+		client.rateBooks(ratings);
+	}
+
+	/**
+	 * Test throws exception for book rating below 0
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test(expected = BookStoreException.class)
+	public void testRatingsNotBelowZero() throws BookStoreException {
+		Set<BookRating> ratings = new HashSet<>();
+		BookRating rating = new BookRating(1, -1);
 		ratings.add(rating);
 		client.rateBooks(ratings);
 	}
