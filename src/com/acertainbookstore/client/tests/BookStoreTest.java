@@ -379,6 +379,28 @@ public class BookStoreTest {
 	}
 
 	/**
+	 * Test throws exception for none valid ISBN
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test
+	public void testSuccessIfCatchesNoneValidISBN() throws BookStoreException {
+		addBooks(1, 1);
+		Set<BookRating> ratings = new HashSet<>();
+		int invalid_isbn = 2;
+		BookRating rating = new BookRating(invalid_isbn, 5);
+		ratings.add(rating);
+		
+		try {
+			client.rateBooks(ratings);
+			fail();
+		} catch (BookStoreException ex) {
+			;
+		}
+	}
+
+	/**
 	 * Tear down after class.
 	 *
 	 * @throws BookStoreException

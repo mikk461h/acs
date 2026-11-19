@@ -343,11 +343,17 @@ public class CertainBookStore implements BookStore, StockManager {
 
 		for (BookRating rating : bookRating) {
 			int value = rating.getRating();
-			
+			int isbn = rating.getISBN();
+
 			if (value < 0 || value > 5) {
-            	throw new BookStoreException(BookStoreConstants.INVALID);
-        	}
-    	}
+				throw new BookStoreException(BookStoreConstants.INVALID);
+			}
+
+			if (!bookMap.containsKey(isbn)) {
+				throw new BookStoreException(BookStoreConstants.INVALID);
+			}
+		}
+		
 	}
 
 	/*
