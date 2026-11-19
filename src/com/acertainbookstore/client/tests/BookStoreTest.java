@@ -356,12 +356,18 @@ public class BookStoreTest {
 	 * @throws BookStoreException
 	 *             the book store exception
 	 */
-	@Test(expected = BookStoreException.class)
+	@Test
 	public void testRatingsAboveFive() throws BookStoreException {
 		Set<BookRating> ratings = new HashSet<>();
 		BookRating rating = new BookRating(1, 6);
 		ratings.add(rating);
-		client.rateBooks(ratings);
+
+		try {
+			client.rateBooks(ratings);
+			fail();
+		} catch (BookStoreException ex) {
+			;
+		}
 	}
 
 	/**
@@ -370,12 +376,18 @@ public class BookStoreTest {
 	 * @throws BookStoreException
 	 *             the book store exception
 	 */
-	@Test(expected = BookStoreException.class)
+	@Test
 	public void testRatingsNotBelowZero() throws BookStoreException {
 		Set<BookRating> ratings = new HashSet<>();
 		BookRating rating = new BookRating(1, -1);
 		ratings.add(rating);
-		client.rateBooks(ratings);
+
+		try {
+			client.rateBooks(ratings);
+			fail();
+		} catch (BookStoreException ex) {
+			;
+		}
 	}
 
 	/**
