@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.Comparator;
 
 import com.acertainbookstore.interfaces.BookStore;
 import com.acertainbookstore.interfaces.StockManager;
@@ -30,7 +31,6 @@ public class CertainBookStore implements BookStore, StockManager {
 
 	/** The mapping of books from ISBN to {@link BookStoreBook}. */
 	private Map<Integer, BookStoreBook> bookMap = null;
-	private Map<Integer, Float> bookRatings = null;
 
 	/**
 	 * Instantiates a new {@link CertainBookStore}.
@@ -318,7 +318,21 @@ public class CertainBookStore implements BookStore, StockManager {
 	 */
 	@Override
 	public synchronized List<Book> getTopRatedBooks(int numBooks) throws BookStoreException {
-		throw new BookStoreException();
+		if (numBooks < 1) {
+			throw new BookStoreException(BookStoreConstants.INVALID);
+		}
+
+		List<BookStoreBook> books = new ArrayList<>(bookMap.values());
+		
+
+		if (books.size() < numBooks) {
+			throw new BookStoreException(BookStoreConstants.INVALID);
+		}
+		
+		books.sort(Comparator.comparing(BookStoreBook::getAverageRating).reversed());
+
+		return books.stream().limit(numBooks).map(book -> book.immutableBook()).collect(Collectors.toList());
+		
 	}
 
 	/*
@@ -356,7 +370,6 @@ public class CertainBookStore implements BookStore, StockManager {
 		for (BookRating rating : bookRating) {
 			int isbn = rating.getISBN();
 			int rating_number = rating.getRating();
-			System.out.println(rating_number);
 			BookStoreBook book = bookMap.get(isbn);
 			book.addRating(rating_number);
 		}

@@ -431,14 +431,98 @@ public class BookStoreTest {
 
 		List<StockBook> updated_books = storeManager.getBooks(); 
 
-		System.out.println(old_books.get(0).getTotalRating());
-		System.out.println(updated_books.get(0).getTotalRating());
-
 		assertTrue(old_books.get(0).getTotalRating() + 5 == updated_books.get(0).getTotalRating() && 
 			old_books.get(0).getNumTimesRated() + 1 == updated_books.get(0).getNumTimesRated()
 		);
+	}
+
+	/**
+	 * Test request more than available books
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test
+	public void testSuccessIfCorrectlyStopsFromRequestingInvalidNumberOfBooks() throws BookStoreException {
+	
+		addBooks(1, 1);
+		try {
+			List<Book> books = client.getTopRatedBooks(3);
+			fail();
+		} catch (BookStoreException ex) {
+			;
+		}
+	}
+
+	/**
+	 * Test request minus number of books
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test
+	public void testSuccessIfCorrectlyStopsNegativeNumberOfBooksRequested() throws BookStoreException {
+		addBooks(1, 1);
 		
-		
+		try {
+			List<Book> books = client.getTopRatedBooks(-1);
+			fail();
+		} catch (BookStoreException ex) {
+			;
+		}
+	}
+
+	/**
+	 * Test can retrieve a rated book
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test
+	public void testSuccessIfBookRatedIsReturned() throws BookStoreException {
+		addBooks(1, 1);
+		List<Book> books = client.getTopRatedBooks(1);
+		assertTrue(books.get(0).getISBN() == 1 && books.size() == 1);
+	}
+	
+
+	/**
+	 * Test that rated book comes above non-rated book 
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test
+	public void testSuccessIfBooksReturnedInCorrectOrder() throws BookStoreException {
+		addBooks(2, 1);
+		addBooks(1, 1);
+		Set<BookRating> ratings = new HashSet<>();
+		int isbn = 1;
+		BookRating rating = new BookRating(isbn, 5);
+		ratings.add(rating);
+		client.rateBooks(ratings);
+		List<Book> books = client.getTopRatedBooks(1);
+		assertTrue(books.get(0).getISBN() == 1 && books.size()==1);
+	}
+
+	/**
+	 * Test that higher rated book is prioritized
+	 *
+	 * @throws BookStoreException
+	 *             the book store exception
+	 */
+	@Test
+	public void testSuccessIfHighestBookRatedIsReturned() throws BookStoreException {
+		addBooks(1, 1);
+		addBooks(2, 1);
+		Set<BookRating> ratings = new HashSet<>();
+		BookRating rating1 = new BookRating(1, 5);
+		BookRating rating2 = new BookRating(2, 1);
+		ratings.add(rating1);
+		ratings.add(rating2);
+		client.rateBooks(ratings);
+		List<Book> books = client.getTopRatedBooks(2);
+		assertTrue(books.get(0).getISBN() == 1 && books.size()==2);
 	}
 
 	/**
