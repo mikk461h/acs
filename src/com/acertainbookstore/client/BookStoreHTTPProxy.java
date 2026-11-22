@@ -10,6 +10,7 @@ import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import com.acertainbookstore.business.Book;
 import com.acertainbookstore.business.BookCopy;
 import com.acertainbookstore.business.BookRating;
+import com.acertainbookstore.business.StockBook;
 import com.acertainbookstore.interfaces.BookStore;
 import com.acertainbookstore.utils.BookStoreKryoSerializer;
 import com.acertainbookstore.interfaces.BookStoreSerializer;

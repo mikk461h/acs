@@ -37,6 +37,8 @@ public enum BookStoreMessageTag {
 	GETSTOCKBOOKSBYISBN,
 
     RATEBOOKS,
+
+    GETTOPRATEDBOOKS,
     
-    GETTOPRATEDBOOKS;
+    GETBOOKSINDEMAND;
 }

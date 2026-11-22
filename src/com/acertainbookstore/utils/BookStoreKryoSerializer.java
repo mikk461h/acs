@@ -9,6 +9,8 @@ import java.util.HashSet;
 
 import com.acertainbookstore.business.ImmutableStockBook;
 import com.acertainbookstore.business.BookRating;
+import com.acertainbookstore.business.StockBook;
+import com.acertainbookstore.business.ImmutableStockBook;
 import com.acertainbookstore.interfaces.BookStoreSerializer;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -43,6 +45,8 @@ public final class BookStoreKryoSerializer implements BookStoreSerializer {
 		binaryStream.register(com.acertainbookstore.business.BookEditorPick.class);
 		binaryStream.register(com.acertainbookstore.business.ImmutableBook.class);
 		binaryStream.register(com.acertainbookstore.business.BookRating.class);
+		binaryStream.register(com.acertainbookstore.business.StockBook.class);
+		binaryStream.register(com.acertainbookstore.business.ImmutableStockBook.class);
 	}
 
 	/*

@@ -140,7 +140,15 @@ public class StockManagerHTTPProxy implements StockManager {
 	 */
 	@Override
 	public List<StockBook> getBooksInDemand() throws BookStoreException {
-		throw new BookStoreException("Not implemented");
+        String urlString = serverAddress + "/" + BookStoreMessageTag.GETBOOKSINDEMAND;
+
+		// Creating zero-length buffer for POST request body, because we don't
+		// need to send any data; this request is just a signal to remove all
+		// books.
+		BookStoreRequest bookStoreRequest = BookStoreRequest.newPostRequest(urlString, "");
+        BookStoreResponse bookStoreResponse = BookStoreUtility.performHttpExchange(client, bookStoreRequest,
+				serializer.get());
+		return (List<StockBook>) bookStoreResponse.getList();
 	}
 
 	/*
