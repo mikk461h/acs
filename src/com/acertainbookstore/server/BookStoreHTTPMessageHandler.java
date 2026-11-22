@@ -16,6 +16,7 @@ import com.acertainbookstore.business.BookCopy;
 import com.acertainbookstore.business.BookEditorPick;
 import com.acertainbookstore.business.CertainBookStore;
 import com.acertainbookstore.business.StockBook;
+import com.acertainbookstore.business.BookRating;
 import com.acertainbookstore.utils.BookStoreKryoSerializer;
 import com.acertainbookstore.interfaces.BookStoreSerializer;
 import com.acertainbookstore.utils.BookStoreConstants;
@@ -420,7 +421,7 @@ public class BookStoreHTTPMessageHandler extends AbstractHandler {
 	private void rateBooks(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		byte[] serializedRequestContent = getSerializedRequestContent(request);
 
-		Set<rating> bookSet = (Set<rating>) serializer.get().deserialize(serializedRequestContent);
+		Set<BookRating> bookSet = (Set<BookRating>) serializer.get().deserialize(serializedRequestContent);
 		BookStoreResponse bookStoreResponse = new BookStoreResponse();
 
 		try {

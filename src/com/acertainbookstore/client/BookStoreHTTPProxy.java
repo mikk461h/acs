@@ -163,7 +163,7 @@ public class BookStoreHTTPProxy implements BookStore {
         urlEncodedNumBooks = URLEncoder.encode(Integer.toString(numBooks), StandardCharsets.UTF_8);
         String urlString = serverAddress + "/" + BookStoreMessageTag.GETTOPRATEDBOOKS + "?"
 				+ BookStoreConstants.BOOK_NUM_PARAM + "=" + urlEncodedNumBooks;
-		BookStoreRequest bookStoreRequest = BookStoreRequest.newPostRequest(urlString);
+		BookStoreRequest bookStoreRequest = BookStoreRequest.newGetRequest(urlString);
 		BookStoreResponse bookStoreResponse = BookStoreUtility.performHttpExchange(client, bookStoreRequest,
 				serializer.get());
 		return (List<Book>) bookStoreResponse.getList();
