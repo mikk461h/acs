@@ -446,13 +446,12 @@ public class BookStoreHTTPMessageHandler extends AbstractHandler {
 	 */
 	@SuppressWarnings("unchecked")
 	private void getTopRatedBooks(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		byte[] serializedRequestContent = getSerializedRequestContent(request);
-
-		int bookSet = (int) serializer.get().deserialize(serializedRequestContent);
+        String numBooksString = URLDecoder.decode(request.getParameter(BookStoreConstants.BOOK_NUM_PARAM), StandardCharsets.UTF_8);
 		BookStoreResponse bookStoreResponse = new BookStoreResponse();
 
 		try {
-			myBookStore.getTopRatedBooks(bookSet);
+            int numBooks = BookStoreUtility.convertStringToInt(numBooksString);
+			bookStoreResponse.setList(myBookStore.getTopRatedBooks(numBooks));
 		} catch (BookStoreException ex) {
 			bookStoreResponse.setException(ex);
 		}

@@ -158,8 +158,12 @@ public class BookStoreHTTPProxy implements BookStore {
 	 */
 	@Override
 	public List<Book> getTopRatedBooks(int numBooks) throws BookStoreException {
-		String urlString = serverAddress + "/" + BookStoreMessageTag.GETTOPRATEDBOOKS;
-		BookStoreRequest bookStoreRequest = BookStoreRequest.newPostRequest(urlString, numBooks);
+
+        String urlEncodedNumBooks = null;
+        urlEncodedNumBooks = URLEncoder.encode(Integer.toString(numBooks), StandardCharsets.UTF_8);
+        String urlString = serverAddress + "/" + BookStoreMessageTag.GETTOPRATEDBOOKS + "?"
+				+ BookStoreConstants.BOOK_NUM_PARAM + "=" + urlEncodedNumBooks;
+		BookStoreRequest bookStoreRequest = BookStoreRequest.newPostRequest(urlString);
 		BookStoreResponse bookStoreResponse = BookStoreUtility.performHttpExchange(client, bookStoreRequest,
 				serializer.get());
 		return (List<Book>) bookStoreResponse.getList();
