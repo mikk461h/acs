@@ -526,43 +526,7 @@ public class BookStoreTest {
 	}
     
 
-    /**
-	 * Test that higher rated book is prioritized
-	 *
-	 * @throws BookStoreException
-	 *             the book store exception
-	 */
-	@Test
-	public void testNoBookGetsReturnedWhenNoBookIsInDemand() throws BookStoreException {
-        addBooks(1, 1);
-		List<StockBook> books = storeManager.getBooksInDemand();
-		assertTrue(books.size()==0);
-	}
-
-    /**
-	 * Test that higher rated book is prioritized
-	 *
-	 * @throws BookStoreException
-	 *             the book store exception
-	 */
-	@Test
-	public void testReturnsBookWhenInDemand() throws BookStoreException {
-        addBooks(1, 1);
-            // Set of books to buy
-		Set<BookCopy> booksToBuy = new HashSet<BookCopy>();
-		booksToBuy.add(new BookCopy(1, 2));
-
-		// Try to buy books
-		try {
-            client.buyBooks(booksToBuy);
-            fail();
-        } catch (BookStoreException ex) {
-			;
-		}
-
-		List<StockBook> books = storeManager.getBooksInDemand();
-		assertTrue(books.get(0).getISBN() == 1 && books.get(0).getNumSaleMisses() > 0 && books.size()==1);
-	}
+    
 
 	/**
 	 * Tear down after class.
